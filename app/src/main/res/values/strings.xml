@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Top Story</string>
+    <string name="short_dummy_text">Lorem Ipsum Dolor Sit Amet</string>
+    <string name="long_dummy_text">Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet</string>
+    <string name="top_story_list_title">Top Stories</string>
+    <string name="title_activity_story_detail">Story Detail</string>
+    <string name="general_error_message">Ups, terjadi kesalahan..</string>
+    <string name="network_error_message">Ups, koneksi internet Anda sedang bermasalah..</string>
+    <string name="try_again_action">Coba Lagi</string>
+</resources>
