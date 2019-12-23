@@ -8,6 +8,7 @@
     android:padding="15dp">
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/short_dummy_text"

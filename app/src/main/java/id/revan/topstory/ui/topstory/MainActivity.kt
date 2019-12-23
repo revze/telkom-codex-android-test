@@ -12,7 +12,7 @@ import id.revan.topstory.data.model.StoryDetail
 import id.revan.topstory.data.state.TopStoryState
 import id.revan.topstory.di.Injector
 import id.revan.topstory.helper.constants.StatusCode
-import id.revan.topstory.shared.StoryItem
+import id.revan.topstory.shared.view.StoryItem
 import id.revan.topstory.shared.extensions.hide
 import id.revan.topstory.shared.extensions.show
 import id.revan.topstory.ui.base.BaseViewModelFactory

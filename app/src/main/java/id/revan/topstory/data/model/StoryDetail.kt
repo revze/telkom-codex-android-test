@@ -19,5 +19,5 @@ data class StoryDetail(
     val time: Long,
 
     @SerializedName("kids")
-    val comments: List<Int>
+    val comments: List<Int>?
 ) : Parcelable

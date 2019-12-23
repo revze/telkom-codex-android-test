@@ -7,4 +7,5 @@
     <string name="general_error_message">Ups, terjadi kesalahan..</string>
     <string name="network_error_message">Ups, koneksi internet Anda sedang bermasalah..</string>
     <string name="try_again_action">Coba Lagi</string>
+    <string name="empty_comment_info">Belum ada komentar</string>
 </resources>

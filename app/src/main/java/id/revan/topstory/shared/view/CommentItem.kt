@@ -1,4 +1,4 @@
-package id.revan.topstory.shared
+package id.revan.topstory.shared.view
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item

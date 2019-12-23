@@ -16,9 +16,9 @@ import id.revan.topstory.data.state.StoryDetailState
 import id.revan.topstory.di.Injector
 import id.revan.topstory.helper.DateTimeHelper
 import id.revan.topstory.helper.constants.StatusCode
-import id.revan.topstory.shared.CommentItem
 import id.revan.topstory.shared.extensions.hide
 import id.revan.topstory.shared.extensions.show
+import id.revan.topstory.shared.view.CommentItem
 import id.revan.topstory.ui.base.BaseViewModelFactory
 import id.revan.topstory.ui.topstory.MainActivity
 import kotlinx.android.synthetic.main.activity_story_detail.*
@@ -59,6 +59,8 @@ class StoryDetailActivity : AppCompatActivity() {
                 .apply {
                     putExtra(MainActivity.STORY, storyDetail)
                     putExtra(MainActivity.LAST_CLICKED, DateTimeHelper.getLastTime())
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
                 }.also {
                     startActivity(it)
                     finish()
@@ -114,8 +116,15 @@ class StoryDetailActivity : AppCompatActivity() {
             tv_author.text = "by ${detail.author}"
             tv_date.text = DateTimeHelper.convertTimestampToReadableTime(detail.time)
 
-            detail.comments.map {
-                adapter.add(CommentItem(Comment("Ini komentar")))
+            if (detail.comments != null) {
+                tv_empty_comment.hide()
+                layout_comment_list.show()
+                detail.comments.map {
+                    adapter.add(CommentItem(Comment("Ini komentar")))
+                }
+            } else {
+                tv_empty_comment.show()
+                layout_comment_list.hide()
             }
         }
     }

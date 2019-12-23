@@ -75,7 +75,19 @@
                 android:textSize="@dimen/text_size_extra_large"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tv_empty_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/empty_comment_info"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                android:visibility="gone" />
+
             <RelativeLayout
+                android:id="@+id/layout_comment_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:descendantFocusability="blocksDescendants">

@@ -5,7 +5,7 @@ import java.util.*
 
 object DateTimeHelper {
     fun convertTimestampToReadableTime(time: Long): String {
-        val date = Date(time)
+        val date = Date(time * 1000)
         val newFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         return newFormat.format(date.time)
