@@ -1,6 +1,8 @@
 package id.revan.topstory.ui.topstory
 
 import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,13 +14,14 @@ import id.revan.topstory.data.model.StoryDetail
 import id.revan.topstory.data.state.TopStoryState
 import id.revan.topstory.di.Injector
 import id.revan.topstory.helper.constants.StatusCode
-import id.revan.topstory.shared.view.StoryItem
 import id.revan.topstory.shared.extensions.hide
 import id.revan.topstory.shared.extensions.show
+import id.revan.topstory.shared.view.StoryItem
 import id.revan.topstory.ui.base.BaseViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_error.*
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private var story: StoryDetail? = null
     private var lastClicked: String? = null
+    private lateinit var layoutProgressBar: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +52,8 @@ class MainActivity : AppCompatActivity() {
             ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.topStoryState.observe(this, topStoryStateObserver)
 
+        registerProgressBar()
+
         rv_story.layoutManager = GridLayoutManager(this, 2)
         rv_story.adapter = adapter
 
@@ -60,13 +66,13 @@ class MainActivity : AppCompatActivity() {
 
     private val topStoryStateObserver = Observer<TopStoryState> {
         if (it.isLoading) {
-            progress_bar.show()
+            layoutProgressBar.show()
             layout_error.hide()
             layout_story_list.hide()
             return@Observer
         }
         if (it.errorCode != StatusCode.NO_ERROR) {
-            progress_bar.hide()
+            layoutProgressBar.hide()
             layout_error.show()
             tv_error_message.text =
                 if (it.errorCode == StatusCode.GENERAL_ERROR) getString(R.string.general_error_message) else getString(
@@ -76,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             return@Observer
         }
 
-        progress_bar.hide()
+        layoutProgressBar.hide()
         layout_error.hide()
         if (story != null) {
             layout_favorite_story.show()
@@ -89,5 +95,20 @@ class MainActivity : AppCompatActivity() {
             adapter.add(StoryItem(it))
         }
         layout_story_list.show()
+    }
+
+    private fun registerProgressBar() {
+        layoutProgressBar = LinearLayout(this)
+        layoutProgressBar.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        layoutProgressBar.orientation = LinearLayout.VERTICAL
+
+        val progressBar = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal)
+        progressBar.isIndeterminate = true
+
+        layoutProgressBar.addView(progressBar)
+        frame_layout.addView(layoutProgressBar)
     }
 }

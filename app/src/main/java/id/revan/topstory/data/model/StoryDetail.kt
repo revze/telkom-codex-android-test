@@ -6,6 +6,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class StoryDetail(
+    @SerializedName("id")
+    val id: Int,
+
     @SerializedName("title")
     val title: String,
 
@@ -18,6 +21,9 @@ data class StoryDetail(
     @SerializedName("time")
     val time: Long,
 
+    @SerializedName("descendants")
+    val countComments: Int,
+
     @SerializedName("kids")
-    val comments: List<Int>?
+    var comments: List<Int>?
 ) : Parcelable

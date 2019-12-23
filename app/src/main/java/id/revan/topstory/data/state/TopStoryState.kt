@@ -1,5 +1,6 @@
 package id.revan.topstory.data.state
 
+import id.revan.topstory.data.model.StoryDetail
 import id.revan.topstory.helper.constants.StatusCode
 
 data class TopStoryState(

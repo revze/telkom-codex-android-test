@@ -5,4 +5,6 @@ object Endpoint {
     const val TOP_STORY = "topstories.json"
     const val STORY_DETAIL = "item/{story_id}.json"
     const val STORY_ID = "story_id"
+    const val COMMENT_DETAIL = "item/{comment_id}.json"
+    const val COMMENT_ID = "comment_id"
 }

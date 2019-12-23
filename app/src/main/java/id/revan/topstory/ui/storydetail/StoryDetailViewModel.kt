@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import id.revan.topstory.data.repository.Output
 import id.revan.topstory.data.repository.StoryRepository
 import id.revan.topstory.data.state.StoryDetailState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StoryDetailViewModel @Inject constructor(private val repository: StoryRepository) :
@@ -21,12 +23,42 @@ class StoryDetailViewModel @Inject constructor(private val repository: StoryRepo
 
             when (result) {
                 is Output.Success -> {
-                    storyDetailState.postValue(StoryDetailState(storyDetail = result.output))
+                    val detail = result.output
+                    val comments = mutableListOf<String>()
+
+                    detail.comments?.map {
+                        comments.add(getCommentDetail(it))
+                    }
+                    storyDetailState.postValue(
+                        StoryDetailState(
+                            storyDetail = result.output,
+                            comments = comments
+                        )
+                    )
                 }
                 is Output.Error -> {
                     storyDetailState.postValue(StoryDetailState(errorCode = result.code))
                 }
             }
         }
+    }
+
+    private suspend fun getCommentDetail(id: Int): String {
+        var text = ""
+
+        withContext(Dispatchers.IO) {
+            val result = repository.getCommentDetail(id)
+
+            when (result) {
+                is Output.Success -> {
+                    val comment = result.output.text
+                    if (comment != null) {
+                        text = comment
+                    }
+                }
+            }
+        }
+
+        return text
     }
 }

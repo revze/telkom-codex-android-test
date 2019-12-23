@@ -3,6 +3,8 @@ package id.revan.topstory.ui.storydetail
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -10,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import id.revan.topstory.R
-import id.revan.topstory.data.model.Comment
 import id.revan.topstory.data.model.StoryDetail
 import id.revan.topstory.data.state.StoryDetailState
 import id.revan.topstory.di.Injector
@@ -38,6 +39,7 @@ class StoryDetailActivity : AppCompatActivity() {
     lateinit var viewModelFactory: BaseViewModelFactory<StoryDetailViewModel>
     private val adapter = GroupAdapter<GroupieViewHolder>()
     private var storyDetail: StoryDetail? = null
+    private lateinit var layoutProgressBar: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,8 @@ class StoryDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val id = intent.getIntExtra(ID, 0)
+
+        registerProgressBar()
 
         iv_favorite.setOnClickListener {
             Intent(this, MainActivity::class.java)
@@ -90,13 +94,13 @@ class StoryDetailActivity : AppCompatActivity() {
 
     private val storyDetailStateObserver = Observer<StoryDetailState> {
         if (it.isLoading) {
-            progress_bar.show()
+            layoutProgressBar.show()
             layout_error.hide()
             sv_story_detail.hide()
             return@Observer
         }
         if (it.errorCode != StatusCode.NO_ERROR) {
-            progress_bar.hide()
+            layoutProgressBar.hide()
             layout_error.show()
             tv_error_message.text =
                 if (it.errorCode == StatusCode.GENERAL_ERROR) getString(R.string.general_error_message) else getString(
@@ -108,7 +112,7 @@ class StoryDetailActivity : AppCompatActivity() {
         val detail = it.storyDetail
         storyDetail = detail
 
-        progress_bar.hide()
+        layoutProgressBar.hide()
         layout_error.hide()
         sv_story_detail.show()
         if (detail != null) {
@@ -116,16 +120,32 @@ class StoryDetailActivity : AppCompatActivity() {
             tv_author.text = "by ${detail.author}"
             tv_date.text = DateTimeHelper.convertTimestampToReadableTime(detail.time)
 
-            if (detail.comments != null) {
+            if (it.comments.isNotEmpty()) {
                 tv_empty_comment.hide()
                 layout_comment_list.show()
-                detail.comments.map {
-                    adapter.add(CommentItem(Comment("Ini komentar")))
+                it.comments.map {
+                    adapter.add(CommentItem(it))
                 }
             } else {
                 tv_empty_comment.show()
                 layout_comment_list.hide()
             }
         }
+    }
+
+
+    private fun registerProgressBar() {
+        layoutProgressBar = LinearLayout(this)
+        layoutProgressBar.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        layoutProgressBar.orientation = LinearLayout.VERTICAL
+
+        val progressBar = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal)
+        progressBar.isIndeterminate = true
+
+        layoutProgressBar.addView(progressBar)
+        frame_layout.addView(layoutProgressBar)
     }
 }

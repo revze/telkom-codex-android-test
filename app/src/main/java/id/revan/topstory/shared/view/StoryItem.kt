@@ -13,6 +13,8 @@ class StoryItem(private val id: Int) : Item() {
         val itemView = viewHolder.itemView
 
         itemView.tv_title.text = id.toString()
+        itemView.tv_count_comment.text = context.getString(R.string.story_comment_info)
+        itemView.tv_score.text = context.getString(R.string.story_score_info)
         viewHolder.itemView.setOnClickListener {
             Intent(context, StoryDetailActivity::class.java)
                 .apply {

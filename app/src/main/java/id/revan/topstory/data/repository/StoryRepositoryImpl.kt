@@ -1,20 +1,22 @@
 package id.revan.topstory.data.repository
 
+import id.revan.topstory.data.model.CommentDetail
 import id.revan.topstory.data.model.StoryDetail
 import id.revan.topstory.data.services.ApiService
 import id.revan.topstory.helper.constants.StatusCode
 import java.io.IOException
 import javax.inject.Inject
 
-class StoryRepositoryImpl @Inject constructor(private val apiService: ApiService) : StoryRepository {
+class StoryRepositoryImpl @Inject constructor(private val apiService: ApiService) :
+    StoryRepository {
     override suspend fun getTopStory(): Output<IntArray> {
         return try {
             val result = apiService.getTopStory()
             Output.Success(result)
         } catch (e: IOException) {
-            Output.Error(StatusCode.NETWORK_ERROR, "")
+            Output.Error(StatusCode.NETWORK_ERROR)
         } catch (e: Exception) {
-            Output.Error(StatusCode.GENERAL_ERROR, "")
+            Output.Error(StatusCode.GENERAL_ERROR)
         }
     }
 
@@ -23,9 +25,20 @@ class StoryRepositoryImpl @Inject constructor(private val apiService: ApiService
             val result = apiService.getStoryDetail(id)
             Output.Success(result)
         } catch (e: IOException) {
-            Output.Error(StatusCode.NETWORK_ERROR, "")
+            Output.Error(StatusCode.NETWORK_ERROR)
         } catch (e: Exception) {
-            Output.Error(StatusCode.GENERAL_ERROR, "")
+            Output.Error(StatusCode.GENERAL_ERROR)
+        }
+    }
+
+    override suspend fun getCommentDetail(id: Int): Output<CommentDetail> {
+        return try {
+            val result = apiService.getCommentDetail(id)
+            Output.Success(result)
+        } catch (e: IOException) {
+            Output.Error(StatusCode.NETWORK_ERROR)
+        } catch (e: Exception) {
+            Output.Error(StatusCode.GENERAL_ERROR)
         }
     }
 }
